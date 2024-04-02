@@ -12,4 +12,16 @@ export class ApiService {
   public get<T>(url: string, options: Options): Observable<T> {
     return this.httpClient.get<T>(url, options) as Observable<T>;
   }
+
+  public post<T>(url: string, body: any, options: Options): Observable<T> {
+    return this.httpClient.post<T>(url, body, options) as Observable<T>;
+  }
+
+  public put<T>(url: string, body: any, options: Options): Observable<T> {
+    return this.httpClient.put<T>(url, body, options) as Observable<T>;
+  }
+
+  public delete<T>(url: string, options: Options): Observable<T> {
+    return this.httpClient.delete<T>(url, options) as Observable<T>;
+  }
 }
