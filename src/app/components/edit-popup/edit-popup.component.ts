@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
     FormsModule,
     ButtonModule,
     InputTextModule,
+    RatingModule,
   ],
   templateUrl: './edit-popup.component.html',
   styleUrl: './edit-popup.component.scss',
@@ -23,7 +24,7 @@ import { InputTextModule } from 'primeng/inputtext';
 export class EditPopupComponent {
   @Input() display: boolean = false;
   @Output() confirm = new EventEmitter<Product>();
-
+  @Output() displayChange = new EventEmitter<boolean>();
   @Input() header: string = '';
 
   @Input() product: Product = {
@@ -35,9 +36,12 @@ export class EditPopupComponent {
 
   onConfirm() {
     this.confirm.emit(this.product);
+    this.display = false;
+    this.displayChange.emit(this.display);
   }
 
   onCancel() {
     this.display = false;
+    this.displayChange.emit(this.display);
   }
 }

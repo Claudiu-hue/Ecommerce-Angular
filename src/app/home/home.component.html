@@ -10,7 +10,8 @@
     <app-product
       *ngFor="let product of products"
       [product]="product"
-      (productOutput)="onProductOutput($event)"
+      (edit)="toggleEditPopup($event)"
+      (delete)="toggleDeletePopup($event)"
     ></app-product>
   </div>
 
@@ -19,19 +20,20 @@
     [rows]="rows"
     [totalRecords]="totalRecords"
     [rowsPerPageOptions]="[5, 10, 20]"
+    #paginator
   ></p-paginator>
 </div>
 
 <app-edit-popup
   [product]="selectedProduct"
-  [display]="displayEditPopup"
+  [(display)]="displayEditPopup"
   (confirm)="onConfirmEdit($event)"
   header="Edit Product"
 >
 </app-edit-popup>
 
 <app-edit-popup
-  [display]="displayAddPopup"
+  [(display)]="displayAddPopup"
   (confirm)="onConfirmAdd($event)"
   header="Add Product"
 >
