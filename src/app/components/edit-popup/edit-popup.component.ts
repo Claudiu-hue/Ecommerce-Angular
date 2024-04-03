@@ -2,7 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { Product } from '../../../types';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,11 +23,21 @@ import { InputTextModule } from 'primeng/inputtext';
     ButtonModule,
     InputTextModule,
     RatingModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './edit-popup.component.html',
   styleUrl: './edit-popup.component.scss',
 })
 export class EditPopupComponent {
+  constructor(private formBuilder: FormBuilder) {}
+
+  productForm = this.formBuilder.group({
+    name: ['', [Validators.required]],
+    image: [''],
+    price: ['', [Validators.required]],
+    rating: [0],
+  });
+
   @Input() display: boolean = false;
   @Output() confirm = new EventEmitter<Product>();
   @Output() displayChange = new EventEmitter<boolean>();
@@ -35,7 +51,14 @@ export class EditPopupComponent {
   };
 
   onConfirm() {
-    this.confirm.emit(this.product);
+    const { name, image, price, rating } = this.productForm.value;
+
+    this.confirm.emit({
+      name: name || '',
+      image: image || '',
+      price: price || '',
+      rating: rating || 0,
+    });
     this.display = false;
     this.displayChange.emit(this.display);
   }
@@ -43,5 +66,14 @@ export class EditPopupComponent {
   onCancel() {
     this.display = false;
     this.displayChange.emit(this.display);
+  }
+
+  ngOnChanges(): void {
+    this.productForm.patchValue({
+      name: this.product.name,
+      image: this.product.image,
+      price: this.product.price,
+      rating: this.product.rating,
+    });
   }
 }
